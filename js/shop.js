@@ -13,11 +13,29 @@ window.Shop = {
             Shop.displayProducts(response.content);
         })
     },
+    addProductToCart: function (productId) {
+        // TODO: read customerID dynamically in the future
+        let request = {
+            customerId:1,
+            productIds:[productId]
+        };
+        $.ajax({
+            url: Shop.API_URL + "/carts",
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(request)
+        }).done(function () {
+            location.replace("shop.html");
+            }
+        );
 
-    displayProducts: function () {
+
+    },
+
+    displayProducts: function (products) {
         let productsHtml = '';
 
-        products.forEach(product => productsHtml+= Shop.getHtmlForOneProduct(product));
+        products.forEach(product => productsHtml += Shop.getHtmlForOneProduct(product));
 
         $('.single-product-area .row:first-child ').html(productsHtml);
 
@@ -40,8 +58,10 @@ window.Shop = {
                     </div>
                 </div>
         `;
+    },
 
-    }
+
+
 };
 
 Shop.getProducts();
